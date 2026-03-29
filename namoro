@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vai Dar Namoro HBA 💘</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #ff4e8a, #a84eff);
+  color: white;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+input, select {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  width: 80%;
+}
+
+button {
+  padding: 15px;
+  border: none;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+
+#formContainer, #lista {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="home">
+  <h1>Vai Dar Namoro HBA 💘</h1>
+  <button onclick="abrirCadastro()">Cadastro</button>
+  <button onclick="verLista()">Ver inscritos 👀</button>
+</div>
+
+<div class="container" id="formContainer">
+  <h2>Cadastro 💌</h2>
+
+  <form onsubmit="salvar(event)">
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="number" id="idade" placeholder="Idade" required>
+    <input type="text" id="procura" placeholder="O que procura?" required>
+
+    <select id="tipo" required>
+      <option value="">Você é?</option>
+      <option>Conquistador(a)</option>
+      <option>Conquistado(a)</option>
+    </select>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<div class="container" id="lista">
+  <h2>Inscritos 💘</h2>
+  <div id="dados"></div>
+  <button onclick="voltar()">Voltar</button>
+</div>
+
+<script>
+function abrirCadastro() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("formContainer").style.display = "flex";
+}
+
+function voltar() {
+  document.getElementById("lista").style.display = "none";
+  document.getElementById("home").style.display = "flex";
+}
+
+function salvar(e) {
+  e.preventDefault();
+
+  let pessoa = {
+    nome: document.getElementById("nome").value,
+    idade: document.getElementById("idade").value,
+    procura: document.getElementById("procura").value,
+    tipo: document.getElementById("tipo").value
+  };
+
+  let lista = JSON.parse(localStorage.getItem("inscritos")) || [];
+  lista.push(pessoa);
+
+  localStorage.setItem("inscritos", JSON.stringify(lista));
+
+  alert("Inscrição salva 💘");
+
+  document.querySelector("form").reset();
+}
+
+function verLista() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("lista").style.display = "flex";
+
+  let lista = JSON.parse(localStorage.getItem("inscritos")) || [];
+  let html = "";
+
+  lista.forEach(p => {
+    html += `<p><b>${p.nome}</b> (${p.idade}) - ${p.tipo} <br> Procura: ${p.procura}</p>`;
+  });
+
+  document.getElementById("dados").innerHTML = html || "Ninguém ainda 😭";
+}
+</script>
+
+</body>
+</html>
